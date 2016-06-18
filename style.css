@@ -1,0 +1,121 @@
+header {
+    background-color: #e0e0d1;
+    overflow: hidden;
+}
+
+header > p {
+    float: left;
+    color: #d54d7b;
+    font-family: "Great Vibes", cursive;
+    font-size: 2em;
+    line-height: normal;
+    font-weight: normal;
+    text-shadow: 0 1px 1px #fff;
+    padding: 0.5em 0 0 1em;
+    position: relative;
+    left: 16px;
+}
+
+header > aside {
+    float: right;
+    padding: 0.5em 1em 0 0;
+}
+
+.validation-messages {
+    font-size: 0.75em;
+    color: #dd2c00;
+    margin: 0.65em 0 0 1.25em;
+}
+
+md-grid-tile {
+    overflow: auto;
+    background-color: #736767;
+}
+
+md-grid-list {
+    margin: 1em;
+    padding: 2em;
+}
+
+md-grid-tile-header figcaption {
+    margin: 0;
+    width: 100%;
+    text-align: center;
+    font-family: 'Bitter', serif;
+    font-size: 2em;
+}
+
+.a1 {
+    background-color: #08085b;
+}
+
+.a2 {
+    background-color: #5d0505;
+}
+
+.a3 {
+    background-color: #052305;
+}
+
+.a4 {
+    background-color: #918787;
+}
+
+md-list {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    top: 48px;
+}
+
+md-list-item {
+    text-align: center;
+    margin: 1em;
+}
+
+md-list-item > div {
+    font-family: Andale Mono, monospace;
+    font-size: larger;
+    color: white;
+}
+
+.list_item {
+    width: 100%;
+}
+
+.status {
+    font-style: oblique;
+}
+
+#add_button {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    margin: 0.5em;
+    background-color: #a0acc9;
+}
+
+#back_button {
+    position: fixed;
+    top: 16px;
+    background-color: rgb(224, 224, 209);
+}
+
+#list_view {
+    position: relative;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#task_form {
+    padding: 2em;
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 2em;
+}
+
+.form_group {
+    margin: 0.75em;
+}

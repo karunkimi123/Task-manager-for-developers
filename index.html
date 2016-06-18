@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="dashboard">
+
+<head>
+    <title> Dashboard App </title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" href="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.4/jquery.min.js" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js" crossorigin="anonymous"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-animate.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-aria.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular-messages.min.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/angular_material/1.1.0-rc2/angular-material.min.js"></script>
+    <script src="app.js"></script>
+</head>
+
+<body>
+    <header ng-controller="date">
+        <p> {{heading.title}}</p>
+        <aside>
+            <form name="myForm">
+                <md-datepicker name="dateField" ng-model="$root.date.currentDate" md-placeholder="Enter date"></md-datepicker>
+                <div class="validation-messages" ng-messages="myForm.dateField.$error">
+                    <div ng-message="valid">The entered value is not a date!</div>
+                </div>
+            </form>
+        </aside>
+    </header>
+
+    <main ng-controller="developers" class="grid_list" ng-show="IsCurrentViewGrid">
+        <md-content>
+            <md-grid-list md-cols="4" md-cols-md="3" md-cols-sm="1" md-row-height="4:3" md-gutter="16px">
+                <md-grid-tile ng-repeat="developer in developers" md-rowspan="1" md-colspan="1">
+                    <md-grid-tile-header ng-click="showSingleView(developer)"> {{developer.Name}} </md-grid-tile-header>
+                    <md-list class="md-2-line" flex="">
+                        <md-list-item class="md-offset" ng-repeat="task in schedule[developer.Id]">
+                            <div class="a{{task.CompanyId}} list_item md-list-item-text" layout="column">
+                                <p> {{task.Description}}</p>
+                                <p class="status"> {{task.Status}}</p>
+                            </div>
+                            <span ng-show="task.Billable" class="input-group-addon">$</span>
+                        </md-list-item>
+                    </md-list>
+                </md-grid-tile>
+            </md-grid-list>
+        </md-content>
+    </main>
+
+    <section ng-controller="developers" ng-show="IsCurrentViewList" ng-cloak="">
+        <md-list class="md-2-line" id="list_view" flex="">
+            <md-list-item class="md-offset" ng-repeat="task in schedule[currentUserId] track by $index">
+                <md-button class="md-mini md-fab" aria-label="clear" ng-disabled="addingState" ng-click="editTask(task, $index)">
+                    <md-icon md-font-set="material-icons">mode_edit</md-icon>
+                </md-button>
+
+                <md-button class="md-mini md-fab" aria-label="clear" ng-disabled="editingState || $index==0" ng-click="moveTask($index, task,1)">
+                    <md-icon md-font-set="material-icons">arrow_upward</md-icon>
+                </md-button>
+
+                <md-button class="md-mini md-fab" aria-label="clear" ng-disabled="editingState || $index==schedule[currentUserId].length-1" ng-click="moveTask($index,task,0)">
+                    <md-icon md-font-set="material-icons">arrow_downward</md-icon>
+                </md-button>
+
+                <div class="a{{task.CompanyId}} list_item md-list-item-text" layout="column">
+                    <p> {{task.Description}} </p>
+                    <p class="status"> {{task.Status}} </p>
+                </div>
+                <span ng-show="task.Billable" class="input-group-addon">$</span>
+
+                <md-button class="md-fab md-mini md-primary" aria-label="clear" ng-disabled="editingState" ng-click="removeTask($index)">
+                    <md-icon md-font-set="material-icons">clear</md-icon>
+                </md-button>
+
+
+            </md-list-item>
+        </md-list>
+        <form novalidate id="task_form" role="form" ng-show="addingState || editingState" name="addform" ng-submit="addform.$valid && submitTask(newTask)">
+            <div class="form_group">
+                <label for="desc"> Description:</label>
+                <input type="text" class="form-control" ng-model="newTask.Description" id="desc" name="desc" required>
+
+                <div ng-show="addform.$submitted || addform.desc.$touched">
+                    <div ng-show="addform.desc.$error.required">Please enter a description for the task</div>
+                </div>
+            </div>
+
+            <div class="form_group">
+                <label for="status"> Status:</label>
+                <input type="text" class="form-control" ng-model="newTask.Status" id="status">
+            </div>
+
+            <div class="form_group">
+                <label> Billable: </label>
+                <label class="radio-inline" required>
+                    <input type="radio" name="billable" value="1" ng-model="newTask.Billable">Yes</label>
+                <label class="radio-inline" required>
+                    <input type="radio" name="billable" value="0" ng-model="newTask.Billable">No</label>
+            </div>
+
+            <div class="form_group">
+                <label> Company: </label>
+                <label class="radio-inline">
+                    <input type="radio" name="companies" value="1" ng-model="newTask.CompanyId" required> Microsoft </label>
+                <label class="radio-inline">
+                    <input type="radio" name="companies" value="2" ng-model="newTask.CompanyId" required> Walmart </label>
+                <label class="radio-inline">
+                    <input type="radio" name="companies" value="3" ng-model="newTask.CompanyId" required>Samsung </label>
+                <label class="radio-inline">
+                    <input type="radio" name="companies" value="4" ng-model="newTask.CompanyId" required>Apple </label>
+
+                <div ng-show="addform.$submitted || addform.companies.$touched">
+                    <div ng-show="addform.companies.$error.required">Please select a company</div>
+                </div>
+            </div>
+            <div class="form_group">
+                <div class="btn-group inline">
+                    <button type="submit" class="btn btn-default">Submit</button>
+                    <button type="button" class="btn btn-default" ng-click="resetTask()">Reset</button>
+                    <button type="button" class="btn btn-default" ng-click="cancelTask();endAddTask()">Cancel</button>
+                </div>
+            </div>
+        </form>
+
+        <button type="button" class="btn btn-default" id="add_button" ng-click="addTask()" ng-disabled="editingState">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+        </button>
+
+        <button type="button" id="back_button" class="btn btn-default" ng-show="IsCurrentViewList" ng-click="showGridView()">
+            <span class="glyphicon glyphicon-menu-left" aria-hidden="true"></span>
+        </button>
+    </section>
+
+</body>
+
+</html>
