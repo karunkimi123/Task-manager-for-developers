@@ -1,5 +1,6 @@
 var angularApp = angular.module('dashboard', ['ngMaterial', 'ngMessages']);
 
+// This is a header controller that initializes the date and heading of the applicaiton and exposes to child scopes
 angularApp.controller('date', ['$rootScope', '$scope', function ($rootScope, $scope) {
     var date = new Date();
     $rootScope.date = {
