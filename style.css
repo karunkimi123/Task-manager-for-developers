@@ -1,6 +1,19 @@
 header {
+    position: fixed;
+    width: 100%;
+    z-index: 1;
     background-color: #e0e0d1;
     overflow: hidden;
+}
+
+main {
+    position: relative;
+    top: 4em;
+}
+
+section {
+    position: relative;
+    top: 4em;
 }
 
 header > p {
@@ -97,6 +110,7 @@ md-list-item > div {
 
 #back_button {
     position: fixed;
+    z-index: 2;
     top: 16px;
     background-color: rgb(224, 224, 209);
 }
